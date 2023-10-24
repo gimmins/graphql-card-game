@@ -1,8 +1,6 @@
 import React from "react";
-import { gql, useQuery, useMutation } from "@apollo/client";
-import { Button, Center, HStack, Spinner } from "@chakra-ui/react";
-import { usePusher } from "../hooks/usePusher";
-import { Box, Image } from "@chakra-ui/react";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { Box, Button, Center, HStack, Image, Spinner } from "@chakra-ui/react";
 import { deckdata } from "../data/deckdata";
 
 const GET_PLAYER_DECK = gql`
@@ -20,7 +18,6 @@ const GET_OTHER_PLAYER_DECK = gql`
 export const Deck = ({ who, gameStatus }) => {
   const playerId = localStorage.getItem("playerId");
 
-  const { channel }: { channel: any } = usePusher();
   const { data, loading, refetch } = useQuery(
     who === "mine" ? GET_PLAYER_DECK : GET_OTHER_PLAYER_DECK,
     {
@@ -37,10 +34,6 @@ export const Deck = ({ who, gameStatus }) => {
       </Center>
     );
   }
-
-  channel?.bind("my-event", function (data) {
-    refetch();
-  });
 
   const deckToParse =
     who === "mine"

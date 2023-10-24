@@ -1,6 +1,11 @@
 // GraphQL type and query definitions
 // Note: These are example types. You should replace them with what you need
 export const typeDefs = `#graphql
+  type DealEvent {
+    title: String
+    description: String
+  }
+
   type Query {
     getPlayer(id: ID!): Player
     getPlayerByPlayerId(playerId: String!): Player
@@ -15,6 +20,11 @@ export const typeDefs = `#graphql
   type Mutation {
     setPlayer(playerId: String, id: ID!): GeneralResponse!
     draw(playerId: String): DrawResponse!
+    draw2(playerId: String): DrawResponse!
+  }
+
+  type Subscription {
+    deal: DealEvent
   }
 
   type DrawResponse {
@@ -80,7 +90,14 @@ export const resolvers = {
 
         if (response) {
           dataSources.gameAPI.initializeGame();
-          dataSources.pusher.trigger("my-channel", "my-event", "player joined");
+          dataSources.pubsub.publish("EVENT_CREATED", {
+            title: "hello",
+            description: "world",
+          });
+          dataSources.pubsub.publish("EVENT_PLAYER_ADDED", {
+            title: "EVENT_PLAYER_ADDED",
+            description: "EVENT_PLAYER_ADDED",
+          });
 
           return {
             code: 200,
@@ -103,8 +120,34 @@ export const resolvers = {
         const response = await dataSources.gameAPI.draw(playerId);
 
         if (response) {
-          dataSources.pusher.trigger("my-channel", "my-event", "draw card");
+          return {
+            code: 200,
+            success: true,
+            message: "Successfully draw card from deck",
+            cards: response,
+          };
+        } else {
+          throw new Error();
+        }
+      } catch (err) {
+        return {
+          code: 404,
+          success: false,
+          message: "Failed to draw card from deck",
+        };
+      }
+    },
+    draw2: async (_, { playerId }, { dataSources }) => {
+      dataSources.pubsub.publish("EVENT_PLAYER_ADDED", {
+        deal: {
+          title: "hello",
+          description: "world",
+        },
+      });
+      try {
+        const response = await dataSources.gameAPI.draw(playerId);
 
+        if (response) {
           return {
             code: 200,
             success: true,

@@ -1,11 +1,14 @@
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
+import { PubSub } from "graphql-subscriptions";
+import { useServer } from "graphql-ws/lib/use/ws";
 import http from "http";
-import Pusher from "pusher";
+import { WebSocketServer } from "ws";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 import { resolvers, typeDefs } from "./CardDealerServer";
 import { sequelize } from "./database";
 import { GameAPI } from "./datasources/game-api";
@@ -13,10 +16,24 @@ import { PlayerAPI } from "./datasources/player-api";
 import { Deck } from "./models/Deck";
 import { Player } from "./models/Player";
 
+const pubsub = new PubSub();
 const app = express();
 const httpServer = http.createServer(app);
 
-const pusher = new Pusher({});
+resolvers["Subscription"] = {
+  deal: {
+    subscribe: () => pubsub.asyncIterator(["EVENT_PLAYER_ADDED"]),
+  },
+};
+
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: "/",
+});
+
+const serverCleanup = useServer({ schema }, wsServer);
 
 sequelize.sync().then(async () => {
   const players = await Player.findAll();
@@ -39,7 +56,18 @@ sequelize.sync().then(async () => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose();
+          },
+        };
+      },
+    },
+  ],
 });
 
 server.start().then(() => {
@@ -53,23 +81,12 @@ server.start().then(() => {
           dataSources: {
             playerAPI: new PlayerAPI(Player),
             gameAPI: new GameAPI(Player, Deck),
-            pusher,
+            pubsub,
           },
         };
       },
     }),
   );
-
-  app.post("/pusher/auth", (req, res) => {
-    const socketId = req.body.socket_id;
-    const channel = req.body.channel_name;
-
-    const authResponse = pusher.authorizeChannel(socketId, channel);
-
-    res.json({
-      ...authResponse,
-    });
-  });
 
   new Promise<void>(resolve => httpServer.listen({ port: 4000 }, resolve)).then(
     () => console.log(`🚀 Server ready at http://localhost:4000/`),

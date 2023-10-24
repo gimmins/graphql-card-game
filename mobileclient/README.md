@@ -9,9 +9,10 @@ npm install
 
 ## To test the app
 
-We have setup the skeleton of an Expo-based React-Native mobile app. Feel free to not use Expo, but in our experience it makes things much easier. 
+We have setup the skeleton of an Expo-based React-Native mobile app. Feel free to not use Expo, but in our experience it makes things much easier.
 
 Steps:
+
 - Download the Expo Go app on your iphone or android
 - Run `npm run start` on your computer to start the development server
 - Use your phone's camera to scan the QR code and start running the app
@@ -19,9 +20,10 @@ Steps:
 
 Fallback:
 If the above does not work for you, try this:
+
 - Install localtunnel : https://formulae.brew.sh/formula/localtunnel
 - Run `lt --port 4000` to start a publically accessible tunnel to your computer
-- Hardcode the resulting url as URL const in apolloGqlClient.ts 
+- Hardcode the resulting url as URL const in apolloGqlClient.ts
 
 If everything is working correctly, you should see a simple app with example data fetched from your server. Make sure the server is running at the same time. If you run into issues here, please feel free to contact us as debugging the raw setup is not the intent of the exercise.
 

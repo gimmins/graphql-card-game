@@ -1,8 +1,7 @@
-import { Deck } from "../components/Deck";
 import { gql, useQuery } from "@apollo/client";
-import { usePusher } from "../hooks/usePusher";
 import { Center, Flex, Heading, VStack } from "@chakra-ui/react";
 import { DealerDeck } from "../components/DealerDeck";
+import { Deck } from "../components/Deck";
 
 const GET_GAME_STATUS = gql`
   query Query($playerId: String!) {
@@ -13,15 +12,10 @@ const GET_GAME_STATUS = gql`
 export const GameRoom = () => {
   const playerId = localStorage.getItem("playerId");
 
-  const { channel }: { channel: any } = usePusher();
   const { data, loading, refetch } = useQuery(GET_GAME_STATUS, {
     variables: {
       playerId: playerId,
     },
-  });
-
-  channel?.bind("my-event", function (data) {
-    refetch();
   });
 
   if (loading) return <>Loading</>;

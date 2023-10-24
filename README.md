@@ -1,5 +1,3 @@
-We are excited that you believe in our mission and consider it a possible home for you! This part of the interview process is designed to give you signal on the tech stack and the kind of problems we solve everyday, and for us to get signal on how you approach them, all while having fun with some code.
-
 # The assignment
 
 The goal of this assignment is to create a mini-game that involves two players drawing cards from a deck of 52 playing cards at random. This involves building a server as well as a client (you can either build for web using React or for mobile using React Native). In either case, GraphQL should be used as the API for server and client to talk to each other.
@@ -39,25 +37,3 @@ Once finished:
 
 - Commit your code to this repository (commit directly, no need to send a Pull Request)
 - Schedule time with us to go over your approach afterwards: https://calendly.com/hamzaaftab/pl-intro
-
-# Logistics
-
-- Aim to spend no more than 3 hours on the assignment. It's ok if it's not fully complete or polished.
-- If you have questions, Hamza will be online at your pre-agreed upon time slot to answer them async. Feel free to send questions to Hamza over email and you should receive a quick reply.
-
-# FAQs
-
-**I spent too much time getting the basic setup working, does that count against the 3 hour time limit**
-No. We recommend that the very first thing you do without actually starting is to make sure you can run the server and open the web or mobile demo app. Your 3 hour time limit should start at that point. Also, we don't want you to spend your entire time debugging setup-related issues. If you have been stuck for >15 mins, reach out and we will try to unblock you as soon as possible.
-
-**What if I have questions about what the ideal product behavior should be?**
-Feel free to make product assumptions that you think will make for a good user experience while keeping the technical complexity within reason. If you are truly blocked on a question, please feel free to ask over email.
-
-**How much should I worry about design and look and feel of the app?**
-Treat it as a low-fidelity early prototype of a feature. It should "feel" to the users that they are being dealt cars from a deck, the functionality should be simple and easy to use. It need not look super aesthetically pleasing.
-
-**Can I change which frameworks are used or the tech stack?**
-The tech stack provided is what we use, but we are totally fine with you using what you are most comfortable with, as long as the original intent of the deliverable is being met.
-
-**Can I leverage and import useful modules as necessary?**
-Yes
