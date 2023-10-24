@@ -17,7 +17,6 @@ Things that are out of scope, unless you feel like going for extra credit:
 
 - Server only needs to support one active game at a time
 - Server does not need long term persistence. It is ok if server restart results in all data being lost. However, each of the two players' clients should be able to restart and resume from same spot in the game.
-- Perf (this is a quick MVP after all)
 
 Some things to think about:
 
@@ -26,14 +25,3 @@ Some things to think about:
 - How do the two clients know its their turn
 - How the code may be organized
 - How the cards should appear in the UX
-
-# Starting point
-
-In order to get started, we have created a "server" directory with a basic Node + GraphQL server setup. And then we have a a "webclient" directory with a basic React app setup for web and a "mobileclient" directory with basic Expo + React-Native setup for mobile. You will most likely spend most of your time in the files that begin with CardDealer, but feel free to take a look and/or modify the rest of the skeleton code.
-
-# Deliverables
-
-Once finished:
-
-- Commit your code to this repository (commit directly, no need to send a Pull Request)
-- Schedule time with us to go over your approach afterwards: https://calendly.com/hamzaaftab/pl-intro
