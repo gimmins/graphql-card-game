@@ -1,5 +1,3 @@
-# Mobile app for CardDealer technical assignment (ignore this if you chose to implement for web)
-
 ## To get started
 
 ```
@@ -25,6 +23,6 @@ If the above does not work for you, try this:
 - Run `lt --port 4000` to start a publically accessible tunnel to your computer
 - Hardcode the resulting url as URL const in apolloGqlClient.ts
 
-If everything is working correctly, you should see a simple app with example data fetched from your server. Make sure the server is running at the same time. If you run into issues here, please feel free to contact us as debugging the raw setup is not the intent of the exercise.
+If everything is working correctly, you should see a simple app with example data fetched from your server. Make sure the server is running at the same time.
 
 In order to test as both Player A and Player B at same time, you might want to have two different phones. Alternatively, you can use the iPhone or Android simulator.

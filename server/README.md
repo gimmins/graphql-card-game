@@ -1,5 +1,3 @@
-# Server for CardDealer technical assignment
-
 ## To get started
 
 ```

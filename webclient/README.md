@@ -1,5 +1,3 @@
-# Web app for CardDealer technical assignment (ignore this if you chose to implement for mobile)
-
 ## To get started
 
 ```
