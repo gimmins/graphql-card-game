@@ -1,4 +1,6 @@
 import { deckdata } from "../../../data/deckdata";
+import { Deck } from "../models/Deck";
+import { Player } from "../models/Player";
 
 /* https://www.educative.io/answers/how-to-shuffle-an-array-in-javascript */
 const shuffle = array => {
@@ -16,16 +18,8 @@ const shuffle = array => {
 };
 
 export class GameAPI {
-  Player: any;
-  Deck: any;
-
-  constructor(Player, Deck) {
-    this.Player = Player;
-    this.Deck = Deck;
-  }
-
   async initializeGame() {
-    const players = await this.Player.findAll();
+    const players = await Player.findAll();
 
     let initialize = true;
 
@@ -36,10 +30,10 @@ export class GameAPI {
     }
 
     if (initialize) {
-      const deck = await this.Deck.findAll();
+      const deck = await Deck.findAll();
       const parsedDeck = JSON.parse(deck[0].dataValues.deck);
 
-      this.Deck.update(
+      Deck.update(
         { deck: JSON.stringify(shuffle(parsedDeck)) },
         {
           where: {
@@ -48,7 +42,7 @@ export class GameAPI {
         },
       );
 
-      this.Player.update(
+      Player.update(
         { turn: true },
         {
           where: {
@@ -60,7 +54,7 @@ export class GameAPI {
   }
 
   async getGameStatus(playerId) {
-    const players = await this.Player.findAll();
+    const players = await Player.findAll();
 
     for (let i = 0; i < 2; i++) {
       if (!players[i].dataValues.playerId) {
@@ -68,7 +62,7 @@ export class GameAPI {
       }
     }
 
-    const deck = await this.Deck.findAll();
+    const deck = await Deck.findAll();
     const parsedDeck = JSON.parse(deck[0].dataValues.deck);
 
     if (parsedDeck.length <= 0) {
@@ -115,7 +109,7 @@ export class GameAPI {
   }
 
   async draw(playerId) {
-    const players = await this.Player.findAll({
+    const players = await Player.findAll({
       where: {
         playerId,
       },
@@ -125,7 +119,7 @@ export class GameAPI {
       return null;
     }
 
-    const deck = await this.Deck.findAll();
+    const deck = await Deck.findAll();
     const parsedDeck = JSON.parse(deck[0].dataValues.deck);
 
     const topCard = parsedDeck.shift();
@@ -133,7 +127,7 @@ export class GameAPI {
     let playerCards = JSON.parse(players[0].dataValues.cards);
     playerCards.push(topCard);
 
-    const playerUpdateResult = await this.Player.update(
+    const playerUpdateResult = await Player.update(
       { cards: JSON.stringify(playerCards), turn: false },
       {
         where: {
@@ -142,7 +136,7 @@ export class GameAPI {
       },
     );
 
-    const otherPlayerUpdateResult = await this.Player.update(
+    const otherPlayerUpdateResult = await Player.update(
       {
         turn: true,
       },
@@ -153,7 +147,7 @@ export class GameAPI {
       },
     );
 
-    const deckUpdateResult = await this.Deck.update(
+    const deckUpdateResult = await Deck.update(
       {
         deck: JSON.stringify(parsedDeck),
       },
@@ -175,7 +169,7 @@ export class GameAPI {
   }
 
   async getDeck() {
-    const result = await this.Deck.findAll();
+    const result = await Deck.findAll();
 
     return result[0].dataValues.deck;
   }

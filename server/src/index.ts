@@ -79,8 +79,8 @@ server.start().then(() => {
       context: async () => {
         return {
           dataSources: {
-            playerAPI: new PlayerAPI(Player),
-            gameAPI: new GameAPI(Player, Deck),
+            playerAPI: new PlayerAPI(),
+            gameAPI: new GameAPI(),
             pubsub,
           },
         };

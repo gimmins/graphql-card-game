@@ -1,12 +1,8 @@
+import { Player } from "../models/Player";
+
 export class PlayerAPI {
-  Player: any;
-
-  constructor(Player) {
-    this.Player = Player;
-  }
-
   async getPlayer(id) {
-    const result = await this.Player.findAll({
+    const result = await Player.findAll({
       where: {
         id,
       },
@@ -22,7 +18,7 @@ export class PlayerAPI {
   }
 
   async getPlayerByPlayerId(playerId) {
-    const result = await this.Player.findAll({
+    const result = await Player.findAll({
       where: {
         playerId,
       },
@@ -40,7 +36,7 @@ export class PlayerAPI {
   }
 
   async getDeckByPlayerId(playerId) {
-    const result = await this.Player.findAll({
+    const result = await Player.findAll({
       where: {
         playerId,
       },
@@ -50,7 +46,7 @@ export class PlayerAPI {
   }
 
   async getOtherPlayerDeck(playerId) {
-    const result = await this.Player.findAll();
+    const result = await Player.findAll();
 
     const otherPlayer = result.filter(
       player => player.dataValues.playerId !== playerId,
@@ -60,7 +56,7 @@ export class PlayerAPI {
   }
 
   async setPlayer(playerId, id) {
-    const result = await this.Player.update(
+    const result = await Player.update(
       { playerId },
       {
         where: {
@@ -73,7 +69,7 @@ export class PlayerAPI {
   }
 
   async getAllPlayers() {
-    const result = await this.Player.findAll();
+    const result = await Player.findAll();
 
     return result.map(player => ({
       id: player.dataValues.id,
@@ -85,7 +81,7 @@ export class PlayerAPI {
   }
 
   async getNoneAssignedPlayers() {
-    const result = await this.Player.findAll();
+    const result = await Player.findAll();
 
     return result
       .filter(player => !player.dataValues.playerId)
