@@ -90,13 +90,12 @@ export const resolvers = {
 
         if (response) {
           dataSources.gameAPI.initializeGame();
-          dataSources.pubsub.publish("EVENT_CREATED", {
-            title: "hello",
-            description: "world",
-          });
+
           dataSources.pubsub.publish("EVENT_PLAYER_ADDED", {
-            title: "EVENT_PLAYER_ADDED",
-            description: "EVENT_PLAYER_ADDED",
+            deal: {
+              title: "EVENT_PLAYER_ADDED",
+              description: "EVENT_PLAYER_ADDED",
+            },
           });
 
           return {

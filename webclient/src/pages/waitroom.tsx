@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { gql, useMutation, useQuery, useSubscription } from "@apollo/client";
-import { Button, Center, VStack } from "@chakra-ui/react";
+import { Box, Button, Center, VStack } from "@chakra-ui/react";
+import { CornerDecoration } from "../components/CornerDecoration";
+import { JoinGameBox } from "../components/JoinGameBox";
 
 const GET_NONE_ASSIGNED_PLAYERS = gql`
   query GetNoneAssignedPlayers {
@@ -46,8 +48,11 @@ const GET_DEAL = gql`
 
 export const WaitRoom = () => {
   const playerId = localStorage.getItem("playerId");
-  const { data: subscriptionData, loading: subscriptionLoading } =
-    useSubscription(GET_DEAL);
+  const value = useSubscription(GET_DEAL, {
+    onSubscriptionData: ({ subscriptionData: data }) => {
+      console.log(data);
+    },
+  });
   const { data, loading, refetch } = useQuery(GET_NONE_ASSIGNED_PLAYERS);
   const navigate = useNavigate();
   const [setPlayer] = useMutation(SET_PLAYERS, {
@@ -58,9 +63,9 @@ export const WaitRoom = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(subscriptionData);
-  }, [subscriptionData]);
+  // useEffect(() => {
+  //   console.log(subscriptionData);
+  // }, [subscriptionData]);
 
   if (loading) return <>loading</>;
 
@@ -78,39 +83,37 @@ export const WaitRoom = () => {
   };
 
   return (
-    <Center h="100vh" bgColor="#449144">
-      <VStack
-        border="2px"
-        borderColor="#83d283"
-        w="40vw"
-        p={10}
-        borderRadius={3}
-      >
-        {playerId ? (
-          <Button
-            w="100%"
-            colorScheme="green"
-            size="lg"
-            onClick={e => {
-              navigate("/gameroom");
-            }}
-          >
-            Continue as {data?.getPlayerByPlayerId?.name}
-          </Button>
-        ) : (
-          data?.getNoneAssignedPlayers.map((player, index) => (
-            <Button
-              w="100%"
-              colorScheme="green"
-              size="lg"
-              onClick={e => handlePlayerButtonClick(player.id)}
-              key={index}
-            >
-              {player?.name}
-            </Button>
-          ))
-        )}
-      </VStack>
+    <Center w="100%" h="100vh" bgColor="#449144">
+      <JoinGameBox>
+        <Box bgColor="#449144" h="100%">
+          <VStack p={10} borderRadius={3} h="100%" justifyContent="center">
+            {playerId ? (
+              <Button
+                w="100%"
+                colorScheme="green"
+                size="lg"
+                onClick={e => {
+                  navigate("/gameroom");
+                }}
+              >
+                Continue as {data?.getPlayerByPlayerId?.name}
+              </Button>
+            ) : (
+              data?.getNoneAssignedPlayers.map((player, index) => (
+                <Button
+                  w="100%"
+                  colorScheme="green"
+                  size="lg"
+                  onClick={e => handlePlayerButtonClick(player.id)}
+                  key={index}
+                >
+                  {player?.name}
+                </Button>
+              ))
+            )}
+          </VStack>
+        </Box>
+      </JoinGameBox>
     </Center>
   );
 };
